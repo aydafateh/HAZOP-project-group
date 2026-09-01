@@ -3,7 +3,7 @@ let token = null;
 let historyData = [];
 let currentUserRole = 'admin';
 
-const API_BASE = "http://localhost:8000";
+const API_BASE = "https://hazop-project-group.onrender.com";
 
 // ========== لاگین ==========
 async function login() {
