@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <title>سیستم مدیریت ریسک - فاز ۳ کامل</title>
+    <link rel="stylesheet" href="style_final.css">
+    <link rel="manifest" href="manifest.json">
+    <script src="https://cdn.socket.io/4.5.0/socket.io.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <!--<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>-->
+</head>
+<body>
+    <div class="login-container" id="loginContainer">
+        <div class="card">
+            <h2>🔐 ورود به سامانه</h2>
+            <input type="text" id="username" placeholder="نام کاربری" ><br>
+            <input type="password" id="password" placeholder="رمز عبور" ><br>
+            <button onclick="login()">ورود</button>
+            <button onclick="showRegister()">ثبت‌نام</button>
+        </div>
+    </div>
+
+    <!-- فرم ثبت‌نام -->
+    <div class="login-container" id="registerContainer" style="display:none;">
+        <div class="card" style="width: 450px;">
+            <h2>📝 ثبت‌نام کاربر جدید</h2>
+            <div class="register-form">
+                <input type="text" id="reg_fullname" placeholder="نام و نام خانوادگی"><br>
+                <input type="text" id="reg_personnel_code" maxlength="10" placeholder="کد پرسنلی (کد ملی 10 رقمی)"><br>
+                <input type="text" id="reg_phone" maxlength="11" placeholder="شماره تلفن (مثال: 09123456789)"><br>
+                <input type="text" id="reg_username" placeholder="نام کاربری (فقط انگلیسی و عدد)"><br>
+                <input type="password" id="reg_password" placeholder="رمز عبور (حداقل 6 کاراکتر)"><br>
+                <input type="password" id="reg_confirm_password" placeholder="تکرار رمز عبور"><br>
+                <div class="password-strength" id="passwordStrength"></div>
+                <button onclick="register()" style="margin-top: 10px;">✔ ثبت‌نام</button>
+                <button onclick="showLogin()" style="background: #666;">↩ بازگشت به ورود</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="container" id="mainContainer" style="display:none;">
+        <div class="header-bg" style="background: linear-gradient(135deg, #2F3C7E 0%, #FBEAEB 100%), url('IMG1.jpeg'); background-size: cover; background-blend-mode: overlay; background-position: center;">
+            <h1 style="color: #FBEAEB; text-shadow: 3px 3px 300px #2F3C7E;">
+                🏭 سامانه پیشرفته مدیریت ریسک HAZOP
+            </h1>
+            <p style="color: #FBEAEB; margin-top: 10px; opacity: 0.9;">
+                پالایشگاه نفت | استاندارد HAZOP | هوش مصنوعی
+            </p>
+        </div>
+
+        <div class="status-bar">
+            <span id="connectionStatus">🟢 آنلاین</span>
+            <span id="lastUpdate">در انتظار داده...</span>
+        </div>
+
+        <div class="card">
+            <h3>📊 پیش‌بینی دستی</h3>
+            <div class="form-row">
+                <input type="number" id="temp" placeholder="دما">
+                <input type="number" id="press" placeholder="فشار">
+                <input type="number" id="flow" placeholder="جریان">
+                <input type="number" id="level" placeholder="سطح">
+                <button onclick="manualPredict()">پیش‌بینی</button>
+            </div>
+            <div id="result" class="result hidden"></div>
+        </div>
+
+        <div class="row">
+            <div class="card half">
+                <h3>📈 آمار ریسک</h3>
+                <div id="stats"></div>
+                <canvas id="riskPieChart" width="200" height="200" style="max-width:200px; margin:20px auto; display:block;"></canvas>
+            </div>
+            <div class="card half">
+                <h3>⚠️ آخرین هشدار</h3>
+                <div id="lastAlert">هیچ هشدار جدیدی</div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="card half">
+                <h3>🏆 رتبه‌بندی واحدهای پرخطر</h3>
+                <div id="riskRanking"><div class="loading">در حال محاسبه...</div></div>
+            </div>
+            <div class="card half">
+                <h3>⚠️ تاریخچه هشدارها (۱۰ مورد اخیر)</h3>
+                <ul id="alertHistory" style="max-height:200px; overflow-y:auto;"><li>در حال بارگذاری...</li></ul>
+            </div>
+        </div>
+        <div class="card">
+            <h3>📈 روند پارامترهای سنسور (آخرین ۳۰ رکورد)</h3>
+            <div class="form-row">
+                <select id="sensorParam" style="flex:2;">
+                    <option value="temperature">🌡️ دما (°C)</option>
+                    <option value="pressure">💨 فشار (bar)</option>
+                    <option value="flow_rate">💧 جریان (m³/h)</option>
+                    <option value="level">📊 سطح (%)</option>
+                </select>
+                <button onclick="loadSensorChart()" style="flex:1;">📈 نمایش نمودار</button>
+            </div>
+            <canvas id="sensorTrendChart" width="800" height="300" style="max-width:100%; margin-top:15px;"></canvas>
+        </div>
+
+        <div class="card">
+            <h3>📋 پیش‌بینی‌های لحظه‌ای</h3>
+            <div style="overflow-x:auto;">
+                <table id="historyTable"><thead><tr><th>زمان</th><th>دما</th><th>فشار</th><th>ریسک</th><th>علت</th></tr></thead><tbody></tbody></table>
+            </div>
+        </div>
+
+        <div class="card">
+            <h3>🌳 درخت طبقه‌بندی خطر HAZOP (استاندارد)</h3>
+            <div id="hazardTree" class="hazard-tree-container"></div>
+        </div>
+
+        <div class="row">
+            <div class="card half">
+                <h3>📊 شدت پیامد (Severity Levels) S1-S5</h3>
+                <div id="severityTable" class="level-table"></div>
+            </div>
+            <div class="card half">
+                <h3>📈 احتمال وقوع (Likelihood Levels) L1-L5</h3>
+                <div id="likelihoodTable" class="level-table"></div>
+            </div>
+        </div>
+
+        <div class="card">
+            <h3>⚠️ آستانه بحرانی سناریوهای خاص</h3>
+            <div id="scenarioThresholdsTable" class="threshold-table"></div>
+        </div>
+
+        <div class="card">
+            <h3>📊 ماتریس ریسک ۵×۵ (احتمال × پیامد)</h3>
+            <div id="riskMatrixTable" class="matrix-container"></div>
+            <div class="matrix-legend"><span class="legend-acceptable">■ قابل قبول (Acceptable)</span>
+                <span class="legend-alarp">■ قابل تحمل (ALARP)</span>
+                <span class="legend-unacceptable">■ غیرقابل قبول (Unacceptable)</span>
+            </div>
+        </div>
+
+        <div class="card">
+            <h3>📋 سناریوهای HAZOP و امتیازدهی</h3>
+            <button onclick="showAddScenarioForm()" class="small-btn">+ اضافه کردن سناریو جدید</button>
+            <div id="scenariosList" class="scenarios-list"></div>
+        </div>
+
+        <div id="scenarioForm" class="card" style="display:none;">
+            <h3>➕ سناریو جدید HAZOP</h3>
+            <input type="text" id="scenario_name" placeholder="نام سناریو"><br>
+            <input type="text" id="node" placeholder="واحد (مثل واحد تقطیر)"><br>
+            <input type="text" id="deviation" placeholder="انحراف (مثل فشار بالا)"><br>
+            <textarea id="cause" placeholder="علت"></textarea><br>
+            <textarea id="consequence" placeholder="پیامد"></textarea><br>
+            <select id="probability"><option value="1">احتمال: 1 - بسیار کم</option><option value="2">احتمال: 2 - کم</option><option value="3">احتمال: 3 - متوسط</option><option value="4">احتمال: 4 - زیاد</option><option value="5">احتمال: 5 - بسیار زیاد</option></select><br>
+            <select id="consequence_severity"><option value="1">شدت: 1 - بسیار کم</option><option value="2">شدت: 2 - کم</option><option value="3">شدت: 3 - متوسط</option><option value="4">شدت: 4 - زیاد</option><option value="5">شدت: 5 - فاجعه‌بار</option></select><br>
+            <textarea id="mitigation" placeholder="اقدامات کنترلی"></textarea><br>
+            <button onclick="saveScenario()">ذخیره سناریو</button>
+            <button onclick="hideScenarioForm()">انصراف</button>
+        </div>
+
+        <div class="card">
+            <h3>⚙️ تنظیمات آستانه بحرانی (Set Points)</h3>
+            <div class="threshold-panel">
+                <div class="threshold-row"><label>🌡️ دما (°C):</label><span>کم‌خطر: <span id="temp_low_display">0-170</span></span><span>متوسط: <span id="temp_med_display">170-190</span></span><span>پرخطر: <span id="temp_high_display">190+</span></span><button onclick="editThreshold('temperature')" class="small-btn">✏️ ویرایش</button></div>
+                <div class="threshold-row"><label>💨 فشار (bar):</label><span>کم‌خطر: <span id="press_low_display">0-6.0</span></span><span>متوسط: <span id="press_med_display">6.0-7.5</span></span><span>پرخطر: <span id="press_high_display">7.5+</span></span><button onclick="editThreshold('pressure')" class="small-btn">✏️ ویرایش</button></div>
+            </div>
+        </div>
+
+        <div class="card">
+            <button id="fullPdfBtn">📄 دانلود گزارش کامل PDF</button>
+            <button onclick="exportExcel()" style="background: #2e7d32;">📊 خروجی Excel</button>
+            <button onclick="backupDatabase()" style="background:#ff9800;">💾 پشتیبان دیتابیس</button>
+        </div>
+        <!-- بخش مدیریت کاربران (فقط ادمین می‌بیند) -->
+        <div class="card admin-only" id="userManagementCard" style="display:none;">
+            <h3>👥 مدیریت کاربران (اپراتورها)</h3>
+            
+            <div style="margin-bottom: 20px;">
+                <h4>➕ افزودن اپراتور جدید</h4>
+                <div class="form-row">
+                    <input type="text" id="new_fullname" placeholder="نام و نام خانوادگی">
+                    <input type="text" id="new_personnel_code" maxlength="10" placeholder="کد ملی 10 رقم">
+                    <input type="text" id="new_phone" maxlength="11" placeholder="تلفن 09123456789">
+                    <input type="text" id="new_username" placeholder="نام کاربری">
+                    <input type="password" id="new_password" placeholder="رمز عبور">
+                    <button onclick="createOperator()" style="background:#2e7d32;">➕ افزودن اپراتور</button>
+                </div>
+            </div>
+            
+            <h4>📋 لیست اپراتورها</h4>
+            <div style="overflow-x: auto;">
+                <table id="usersTable" style="width:100%;">
+                    <thead>
+                        <tr><th>نام کاربری</th><th>نام کامل</th><th>کد پرسنلی</th><th>تلفن</th><th>تاریخ ثبت</th><th>عملیات</th></tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+        </div>
+        <div class="footer-custom">
+            <div class="footer-content">
+                <div class="footer-col"><h4>🎓 استاد درس</h4><p>دکتر بهرام پروین</p></div>
+                <div class="footer-col"><h4>👥 گروه پروژه</h4><p>آیدا فاتح اعظم<br>اشکان تکیار<br>شیلا قائینی<br>فرحناز قریشی<br>صبا باغی<br>نیایش عسگری</p></div>
+                <div class="footer-col"><h4>🏛 دانشگاه</h4><p>دانشگاه آزاد اسلامی واحد تهران غرب<br>دانشکده فنی و مهندسی</p></div>
+                <div class="footer-col"><h4>📅 تاریخ پروژه</h4><p>اردیبهشت ۱۴۰۴</p><p style="font-size:13px;">HAZOP / HSE / AI</p></div>
+            </div>
+            <div class="footer-bottom"><p>© ۱۴۰۴ - سامانه مدیریت ریسک پالایشگاه · استاندارد HAZOP · پیاده‌سازی پیشرفته با XGBoost , FastAPI , WebSocket</p></div>
+        </div>
+    </div>
+
+    <script src="script_final.js"></script>
+    <script>
+    if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+            navigator.serviceWorker.register('./sw.js')
+                .then(reg => console.log('Service Worker registered:', reg))
+                .catch(err => console.log('Service Worker error:', err));
+        });
+    }
+    </script>
+</body>
+</html>

@@ -1,0 +1,468 @@
+
+@font-face {
+    font-family: 'Dana';
+    src: url('fonts/Dana-Regular.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+}
+@font-face {
+    font-family: 'Dana';
+    src: url('fonts/Dana-Bold.woff') format('woff');
+    font-weight: bold;
+    font-style: normal;
+}
+body {
+    font-family: 'Dana', 'Tahoma', sans-serif;
+    background: var(--primary-pink);
+    color: var(--text-dark);
+    margin: 0;
+    padding: 20px;
+}
+.container {
+    max-width: 1400px;
+    margin: auto;
+}
+
+/* لاگین */
+.login-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background: linear-gradient(135deg, #1a3e60, #0e2a40);
+}
+
+.login-container .card {
+    width: 350px;
+    text-align: center;
+}
+
+.login-container input {
+    width: 90%;
+    margin: 10px 0;
+    padding: 12px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+}
+
+/* کارت‌ها */
+.card {
+    background: white;
+    border-radius: 20px;
+    padding: 20px;
+    margin-bottom: 25px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+.row {
+    display: flex;
+    gap: 20px;
+}
+
+.half {
+    flex: 1;
+}
+
+/* فرم */
+.form-row {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin-bottom: 15px;
+}
+
+input, button {
+    padding: 12px 16px;
+    font-size: 16px;
+    border-radius: 10px;
+    border: 1px solid #ccc;
+}
+
+button {
+    background: #1a3e60;
+    color: white;
+    cursor: pointer;
+    border: none;
+    font-weight: bold;
+}
+
+button:hover {
+    background: #0e2a40;
+}
+
+.small-btn {
+    background: #ff9800;
+    padding: 5px 15px;
+    font-size: 14px;
+}
+.small-btn:hover {
+    background: #f57c00;
+}
+
+/* نتیجه */
+.result {
+    margin-top: 15px;
+    padding: 12px;
+    border-radius: 12px;
+    font-weight: bold;
+    text-align: center;
+}
+
+.hidden {
+    display: none;
+}
+
+.red-bg { background: #ffebee; color: #c62828; border-right: 6px solid #c62828; }
+.yellow-bg { background: #fff8e1; color: #f57f17; border-right: 6px solid #f57f17; }
+.green-bg { background: #e8f5e9; color: #2e7d32; border-right: 6px solid #2e7d32; }
+
+/* وضعیت */
+.status-bar {
+    background: white;
+    border-radius: 12px;
+    padding: 12px 20px;
+    margin-bottom: 20px;
+    display: flex;
+    justify-content: space-between;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+/* جدول */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+}
+th, td {
+    padding: 10px;
+    text-align: center;
+    border-bottom: 1px solid #ddd;
+}
+th {
+    background: #1a3e60;
+    color: white;
+}
+
+/* آمار */
+.stat-number { font-size: 32px; font-weight: bold; }
+.stat-label { font-size: 14px; color: #666; }
+.stat-item { display: inline-block; width: 30%; text-align: center; padding: 10px; }
+.stat-high { color: #c62828; }
+.stat-medium { color: #f57f17; }
+.stat-low { color: #2e7d32; }
+
+/* آخرین هشدار */
+#lastAlert {
+    font-size: 18px;
+    padding: 15px;
+    border-radius: 12px;
+    text-align: center;
+}
+.alert-critical { background: #ffebee; color: #c62828; border: 2px solid #c62828; }
+.alert-warning { background: #fff8e1; color: #f57f17; border: 2px solid #f57f17; }
+.alert-normal { background: #e8f5e9; color: #2e7d32; }
+
+/* تنظیمات آستانه */
+.threshold-row {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    padding: 15px;
+    border-bottom: 1px solid #eee;
+    flex-wrap: wrap;
+}
+.threshold-row label { font-weight: bold; width: 100px; }
+
+/* رتبه‌بندی */
+.ranking-list { display: flex; flex-direction: column; gap: 10px; }
+.ranking-item {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    padding: 10px;
+    background: #f8f9fa;
+    border-radius: 10px;
+}
+.ranking-number {
+    width: 30px;
+    height: 30px;
+    background: #1a3e60;
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+}
+.ranking-cause { flex: 1; font-size: 14px; }
+.ranking-count {
+    background: #ff9800;
+    padding: 5px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: bold;
+}
+
+/* تاریخچه هشدارها */
+#alertHistory { list-style: none; padding: 0; margin: 0; }
+#alertHistory li { padding: 10px; border-bottom: 1px solid #eee; font-size: 13px; }
+#alertHistory li:hover { background: #f5f5f5; }
+
+.loading, .no-data { text-align: center; padding: 20px; color: #666; }
+
+/* ماتریس ریسک */
+.matrix-container { overflow-x: auto; }
+.matrix-table { width: 100%; border-collapse: collapse; text-align: center; }
+.matrix-table th, .matrix-table td { border: 1px solid #ddd; padding: 12px; font-size: 13px; }
+.matrix-table th { background: #1a3e60; color: white; }
+.matrix-legend { margin-top: 15px; display: flex; gap: 20px; justify-content: center; }
+.legend-acceptable { color: #2e7d32; font-weight: bold; }
+.legend-alarp { color: #f57f17; font-weight: bold; }
+.legend-unacceptable { color: #c62828; font-weight: bold; }
+.cell-acceptable { background: #e8f5e9; }
+.cell-alarp { background: #fff8e1; }
+.cell-unacceptable { background: #ffebee; }
+
+/* سناریوها */
+.scenarios-list { margin-top: 15px; }
+.scenario-item {
+    background: #f5f5f5;
+    padding: 15px;
+    margin-bottom: 10px;
+    border-radius: 12px;
+}
+.scenario-risk-high { border-right: 5px solid #c62828; }
+.scenario-risk-medium { border-right: 5px solid #f57f17; }
+.scenario-risk-low { border-right: 5px solid #2e7d32; }
+
+/* درخت خطر */
+.hazard-tree-container { max-height: 500px; overflow-y: auto; padding: 10px; }
+.hazard-node { margin: 5px 0; padding: 8px 12px; border-radius: 8px; transition: all 0.2s; }
+.hazard-node:hover { background: #e3f2fd; }
+.hazard-node-main { background: #1a3e60; color: white; font-weight: bold; }
+.hazard-node-child { margin-left: 30px; border-left: 2px solid #ff9800; }
+.hazard-node-subchild { margin-left: 60px; border-left: 2px solid #4caf50; }
+.hazard-icon { font-size: 20px; margin-left: 10px; }
+.hazard-guideword { font-size: 12px; color: #ff9800; margin-right: 10px; }
+.hazard-desc { font-size: 11px; color: #666; margin-right: 10px; }
+
+/* Severity / Likelihood */
+.level-table { width: 100%; font-size: 13px; }
+.level-table table { width: 100%; border-collapse: collapse; }
+.level-table th, .level-table td { padding: 8px; text-align: center; border: 1px solid #ddd; }
+.level-table th { background: #1a3e60; color: white; }
+.severity-high { background: #ffebee; }
+.likelihood-high { background: #fff8e1; }
+
+.threshold-table table { width: 100%; border-collapse: collapse; }
+.threshold-table th, .threshold-table td { padding: 10px; border: 1px solid #ddd; }
+.threshold-critical { background: #ffebee; color: #c62828; font-weight: bold; }
+
+/* هدر با افکت اسکرول */
+.header-bg {
+    border-radius: 20px;
+    text-align: center;
+    margin-bottom: 25px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+    transition: all 0.3s ease;
+    background-attachment: fixed;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    padding: 200px 20px;
+}
+.header-bg.scrolled { padding: 20px 20px; opacity: 0.95; }
+.header-bg.scrolled h1 { font-size: 20px; transition: all 0.3s ease; }
+.header-bg.scrolled p { display: none; }
+
+/* پالت رنگی */
+:root {
+    --primary-blue: #2F3C7E;
+    --primary-pink: #FBEAEB;
+}
+body { background: var(--primary-pink); color: #1a1a2e; }
+.card, .input-card { background: white; border-radius: 20px; border-top: 5px solid var(--primary-blue); }
+button { background: var(--primary-blue); color: var(--primary-pink); }
+button:hover { background: #1f2a5c; }
+table th { background: var(--primary-blue); color: var(--primary-pink); }
+
+/* فوتر */
+.footer-custom {
+    background: #2F3C7E;
+    color: #FBEAEB;
+    border-radius: 25px;
+    padding: 20px 25px;
+    margin-top: 40px;
+    box-shadow: 0 -4px 12px rgba(0,0,0,0.1);
+}
+.footer-content {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 20px;
+    border-bottom: 1px solid #FBEAEB33;
+    padding-bottom: 15px;
+    margin-bottom: 15px;
+}
+.footer-col { flex: 1; min-width: 140px; }
+.footer-col h4 {
+    margin: 0 0 8px 0;
+    color: #FBEAEB;
+    font-size: 1rem;
+    border-right: 3px solid #FBEAEB;
+    padding-right: 10px;
+}
+.footer-col p { margin: 5px 0; font-size: 0.85rem; line-height: 1.4; color: #f5e6ea; }
+.footer-bottom { text-align: center; font-size: 0.75rem; opacity: 0.8; }
+
+@media (max-width: 700px) {
+    .footer-content { flex-direction: column; gap: 12px; }
+    .footer-col { text-align: center; }
+    .footer-col h4 { border-right: none; border-bottom: 1px solid #FBEAEB; display: inline-block; padding-bottom: 5px; }
+}
+/* استایل مخصوص چاپ */
+@media print {
+    body {
+        background: white;
+        padding: 0;
+        margin: 0;
+    }
+    .login-container, .status-bar, button, .small-btn, .footer-custom {
+        display: none;
+    }
+    .card {
+        break-inside: avoid;
+        page-break-inside: avoid;
+        box-shadow: none;
+        border: 1px solid #ddd;
+    }
+    .header-bg {
+        background: #2F3C7E !important;
+        color: white !important;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+    }
+    table {
+        break-inside: avoid;
+        page-break-inside: avoid;
+    }
+}
+/* فرم ثبت‌نام */
+.register-form input {
+    width: 90%;
+    margin: 8px 0;
+    padding: 12px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    font-size: 14px;
+}
+
+.password-strength {
+    font-size: 12px;
+    margin-top: 5px;
+    text-align: right;
+}
+
+.strength-weak { color: #c62828; }
+.strength-medium { color: #f57f17; }
+.strength-strong { color: #2e7d32; }
+
+.register-form button {
+    width: 100%;
+    margin-top: 5px;
+}
+.admin-only {
+    border-top: 5px solid #c62828;
+}
+
+/* ========== ریسپانسیو برای موبایل ========== */
+@media (max-width: 768px) {
+    body {
+        padding: 10px;
+    }
+    
+    .container {
+        max-width: 100%;
+        padding: 0;
+    }
+    
+    .row {
+        flex-direction: column;
+        gap: 15px;
+    }
+    
+    .form-row {
+        flex-direction: column;
+    }
+    
+    .form-row input, .form-row button {
+        width: 100%;
+    }
+    
+    .header-bg {
+        padding: 30px 15px;
+    }
+    
+    .header-bg h1 {
+        font-size: 18px;
+    }
+    
+    .status-bar {
+        flex-direction: column;
+        gap: 10px;
+        text-align: center;
+    }
+    
+    table {
+        font-size: 10px;
+    }
+    
+    th, td {
+        padding: 5px;
+        word-break: break-word;
+    }
+    
+    .threshold-row {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+    }
+    
+    .footer-content {
+        flex-direction: column;
+        text-align: center;
+    }
+    
+    .footer-col {
+        text-align: center;
+    }
+    
+    .footer-col h4 {
+        border-right: none;
+        border-bottom: 1px solid #FBEAEB;
+        display: inline-block;
+        padding-bottom: 5px;
+    }
+    
+    .hazard-node-child {
+        margin-left: 15px;
+    }
+    
+    .hazard-node-subchild {
+        margin-left: 30px;
+    }
+}
+
+/* تبلت */
+@media (min-width: 768px) and (max-width: 1024px) {
+    .row {
+        flex-wrap: wrap;
+    }
+    
+    .half {
+        flex: 0 0 100%;
+    }
+}
+* {
+    font-family: 'Dana', 'Tahoma', 'Segoe UI', sans-serif !important;
+}

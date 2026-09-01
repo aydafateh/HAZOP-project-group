@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>ساخت آیکون HAZOP</title>
+    <style>
+        body {
+            background: #2F3C7E;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            font-family: Arial;
+        }
+        .icon-192 {
+            width: 192px;
+            height: 192px;
+            background: linear-gradient(135deg, #2F3C7E, #1a2a5e);
+            border-radius: 40px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+            margin: 20px;
+        }
+        .icon-512 {
+            width: 512px;
+            height: 512px;
+            background: linear-gradient(135deg, #2F3C7E, #1a2a5e);
+            border-radius: 100px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+            margin: 20px;
+        }
+        .flame {
+            font-size: 80px;
+            margin-bottom: 10px;
+        }
+        .flame-512 {
+            font-size: 200px;
+            margin-bottom: 20px;
+        }
+        .text {
+            color: #FBEAEB;
+            font-family: Tahoma;
+            font-weight: bold;
+        }
+        .text-192 { font-size: 24px; }
+        .text-512 { font-size: 64px; }
+        .button {
+            background: #FBEAEB;
+            color: #2F3C7E;
+            border: none;
+            padding: 10px 20px;
+            margin: 10px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div>
+        <div class="icon-192">
+            <div class="flame">🔥</div>
+            <div class="text text-192">HAZOP</div>
+        </div>
+        <div class="icon-512">
+            <div class="flame-512">🔥</div>
+            <div class="text text-512">HAZOP</div>
+        </div>
+        <div style="text-align:center;">
+            <button class="button" onclick="downloadIcon(192)">دانلود icon-192.png</button>
+            <button class="button" onclick="downloadIcon(512)">دانلود icon-512.png</button>
+        </div>
+    </div>
+    <script>
+        function downloadIcon(size) {
+            const element = document.querySelector(`.icon-${size}`);
+            html2canvas(element, { scale: 2 }).then(canvas => {
+                const link = document.createElement('a');
+                link.download = `icon-${size}.png`;
+                link.href = canvas.toDataURL();
+                link.click();
+            });
+        }
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+</body>
+</html>
